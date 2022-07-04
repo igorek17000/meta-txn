@@ -1095,12 +1095,12 @@
     "80001": {
       "events": {},
       "links": {},
-      "address": "0xB2E08A29eB18b5C9d6A3EB29e1425b6C217B9B5E",
-      "transactionHash": "0xc3590c80feae16221837750242ba5dbb3f2ef12bc5e76dc69f1686416a762172"
+      "address": "0x1173A7E40311FE60A0c7a9B4575356C98CaDb2b5",
+      "transactionHash": "0x4df44873bf52967cd25b58c9da2456782f10628f6b7973835871f1be15c350b6"
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-06-25T08:39:06.667Z",
+  "updatedAt": "2022-07-04T04:05:07.832Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

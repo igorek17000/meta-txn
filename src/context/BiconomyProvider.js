@@ -5,8 +5,10 @@ import { Biconomy } from "@biconomy/mexa";
 import Web3 from "web3";
 import { notification } from "antd";
 import { networkConfigs } from "helpers/networks";
-import simpleStorageContract from "contracts/SimpleStorage.json";
-import simpleStorage from "list/simpleStorage.json";
+// import simpleStorageContract from "contracts/SimpleStorage.json";
+// import simpleStorage from "list/simpleStorage.json";
+import simpleStorageContract from "contracts/DiANFT.json";
+import simpleStorage from "list/diaNft.json";
 import biconomyApiKey from "helpers/biconomy";
 
 export const BiconomyContext = createContext({});

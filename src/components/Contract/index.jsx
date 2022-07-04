@@ -9,10 +9,12 @@ import {
   notification,
 } from "antd";
 import { useEffect, useMemo, useState } from "react";
-import simpleStorageContract from "contracts/SimpleStorage.json";
+//import simpleStorageContract from "contracts/SimpleStorage.json";
+import simpleStorageContract from "contracts/DiANFT.json";
 import Address from "components/Address/Address";
 import { useMoralis, useChain } from "react-moralis";
-import simpleStorage from "list/simpleStorage.json";
+//import simpleStorage from "list/simpleStorage.json";
+import simpleStorage from "list/diaNft.json";
 import { useAPIContract } from "hooks/useAPIContract";
 import useBiconomyContext from "hooks/useBiconomyContext";
 import useMetaTransaction from "hooks/useMetaTransaction";
@@ -39,15 +41,23 @@ export default function Contract() {
    * @param {Address} transactionParams.from - address that will sign the metatransaction
    * @param {String} transactionParams.signatureType - either EIP712_SIGN or PERSONAL_SIGN
    */
+  // const { isMetatransactionProcessing, onSubmitMetaTransaction } =
+  //   useMetaTransaction({
+  //     input: storageForm.value,
+  //     transactionParams: {
+  //       from: account,
+  //       signatureType: biconomyProvider[storageForm.signatureType],
+  //     },
+  //   });
+  
   const { isMetatransactionProcessing, onSubmitMetaTransaction } =
     useMetaTransaction({
-      input: storageForm.value,
+      input: [account, 1],
       transactionParams: {
         from: account,
         signatureType: biconomyProvider[storageForm.signatureType],
       },
     });
-
   /**
    * @description Execute `getStorage` call from smart contract
    *
@@ -55,13 +65,27 @@ export default function Contract() {
    * @param {Function} onError - error callback function
    * @param {Function} onComplete -complete callback function
    */
+  // const onGetStorage = ({ onSuccess, onError, onComplete }) => {
+  //   runContractFunction({
+  //     params: {
+  //       chain: chainId,
+  //       function_name: "getStorage",
+  //       abi,
+  //       address: contractAddress,
+  //     },
+  //     onSuccess,
+  //     onError,
+  //     onComplete,
+  //   });
+  // };
   const onGetStorage = ({ onSuccess, onError, onComplete }) => {
     runContractFunction({
       params: {
         chain: chainId,
-        function_name: "getStorage",
+        function_name: "balanceOf",
         abi,
         address: contractAddress,
+        "params": {"owner" : account}
       },
       onSuccess,
       onError,
@@ -91,11 +115,12 @@ export default function Contract() {
             },
           });
         },
-        onError: () => {
+        onError: (e) => {
           notification.error({
             message: "Metatransaction Fail",
             description:
-              "Your metatransaction has failed. Please try again later.",
+              `Your metatransaction has failed. Please try again later. ${e}`,
+
           });
         },
       });
@@ -184,7 +209,7 @@ export default function Contract() {
                 {!isEdit ? (
                   <>
                     <Typography.Text style={{ fontSize: "16px" }}>
-                      Current Storage
+                      Current Token Balance
                     </Typography.Text>
                     <Typography.Text style={{ fontSize: "25px" }}>
                       {contractResponse}
@@ -192,7 +217,7 @@ export default function Contract() {
                   </>
                 ) : (
                   <>
-                    <Typography.Text style={{ fontSize: "16px" }}>
+                    {/* <Typography.Text style={{ fontSize: "16px" }}>
                       Enter New Storage Data
                     </Typography.Text>
                     <Input
@@ -207,7 +232,7 @@ export default function Contract() {
                         })
                       }
                       style={{ height: "40px", width: "100%" }}
-                    />
+                    /> */}
                     <Typography.Text style={{ fontSize: "16px" }}>
                       Choose Signature Type
                     </Typography.Text>
@@ -270,12 +295,12 @@ export default function Contract() {
               disabled={
                 !isBiconomyInitialized ||
                 (isEdit &&
-                  (storageForm.value === "" ||
-                    storageForm.signatureType === ""))
+                  //(storageForm.value === "" ||
+                    (storageForm.signatureType === ""))
               }
               style={{ width: "100%", maxWidth: "280px" }}
             >
-              {isEdit ? "Set Storage" : "Edit Storage"}
+              {isEdit ? "Confirm" : "Mint"}
             </Button>
             {!isBiconomyInitialized && (
               <Typography.Text>Loading dApp...</Typography.Text>
