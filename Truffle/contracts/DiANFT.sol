@@ -29,12 +29,12 @@ contract DiANFT is ERC721Enumerable, Ownable, BaseRelayRecipient {
   uint256 public maxMintAmount = 1;
   bool public paused = false;
   mapping(address => bool) public whitelisted;
-  //address public owner;
+  //address public override owner;
   string data;
-//   modifier onlyOwner() {
-//     require(owner == _msgSender(), "");
-//     _;
-//     }
+  // modifier onlyOwner() {
+  //   require(owner == _msgSender(), "");
+  //   _;
+  //   }
 
   constructor(
     string memory _name,
@@ -72,18 +72,18 @@ function versionRecipient() external pure override returns (string memory) {
 //     }
 
   // public
-  function mint(address _to, uint256 _mintAmount) public payable {
+  function mint(address _to, uint256 _mintAmount) public {
     uint256 supply = totalSupply();
     require(!paused);
     require(_mintAmount > 0);
     require(_mintAmount <= maxMintAmount);
     require(supply + _mintAmount <= maxSupply);
 
-    if (_msgSender() != owner()) {
-        if(whitelisted[_msgSender()] != true) {
-          require(msg.value >= cost * _mintAmount);
-        }
-    }
+    // if (_msgSender() != owner()) {
+    //     if(whitelisted[_msgSender()] != true) {
+    //       require(msg.value >= cost * _mintAmount);
+    //     }
+    // }
 
     for (uint256 i = 1; i <= _mintAmount; i++) {
       _safeMint(_to, supply + i);
@@ -121,41 +121,41 @@ function versionRecipient() external pure override returns (string memory) {
         : "";
   }
 
-  //only owner
-  function setCost(uint256 _newCost) public onlyOwner {
-    cost = _newCost;
-  }
+//   //only owner
+//   function setCost(uint256 _newCost) public onlyOwner {
+//     cost = _newCost;
+//   }
 
-  function setmaxMintAmount(uint256 _newmaxMintAmount) public onlyOwner {
-    maxMintAmount = _newmaxMintAmount;
-  }
+//   function setmaxMintAmount(uint256 _newmaxMintAmount) public onlyOwner {
+//     maxMintAmount = _newmaxMintAmount;
+//   }
 
-  function setBaseURI(string memory _newBaseURI) public onlyOwner {
+  function setBaseURI(string memory _newBaseURI) public {
     baseURI = _newBaseURI;
   }
 
-  function setBaseExtension(string memory _newBaseExtension) public onlyOwner {
-    baseExtension = _newBaseExtension;
-  }
+//   function setBaseExtension(string memory _newBaseExtension) public onlyOwner {
+//     baseExtension = _newBaseExtension;
+//   }
 
-  function pause(bool _state) public onlyOwner {
-    paused = _state;
-  }
+//   function pause(bool _state) public onlyOwner {
+//     paused = _state;
+//   }
  
- function whitelistUser(address _user) public onlyOwner {
-    whitelisted[_user] = true;
-  }
+//  function whitelistUser(address _user) public onlyOwner {
+//     whitelisted[_user] = true;
+//   }
  
-  function removeWhitelistUser(address _user) public onlyOwner {
-    whitelisted[_user] = false;
-  }
+//   function removeWhitelistUser(address _user) public onlyOwner {
+//     whitelisted[_user] = false;
+//   }
 
-  function withdraw() public payable onlyOwner {    
-    // This will payout the owner 95% of the contract balance.
-    // Do not remove this otherwise you will not be able to withdraw the funds.
-    // =============================================================================
-    (bool os, ) = payable(owner()).call{value: address(this).balance}("");
-    require(os);
-    // =============================================================================
-  }
+//   function withdraw() public payable onlyOwner {    
+//     // This will payout the owner 95% of the contract balance.
+//     // Do not remove this otherwise you will not be able to withdraw the funds.
+//     // =============================================================================
+//     (bool os, ) = payable(owner()).call{value: address(this).balance}("");
+//     require(os);
+//     // =============================================================================
+//   }
 }
